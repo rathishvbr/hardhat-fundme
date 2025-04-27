@@ -1,4 +1,4 @@
-const { networkConfig } = require("../helper-hardhat.config");
+const { networkConfig, developmentChains } = require("../helper-hardhat.config");
 const { network } = require("hardhat");
 
 module.exports = async ({ getNamedAccounts, deployments }) => {
@@ -6,7 +6,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     const { deployer } = await getNamedAccounts();
     const chainId = network.config.chainId;
     log("CHAIN ID ============================", chainId);
-    const ethUsdPriceFeed = networkConfig[chainId].ethUsdPriceFeed;
+    let ethUsdPriceFeed;
+
+    if (developmentChains.includes(network.name)) {
+        ethUsdPriceFeed = (await deployments.get("MockV3Aggregator")).address;
+    } else {
+        ethUsdPriceFeed = networkConfig[chainId].ethUsdPriceFeed.address;
+    }
     log("ETH/USD PRICE FEED ============================", ethUsdPriceFeed);
 
     const fundMe = await deploy("FundMe", {
