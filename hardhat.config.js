@@ -9,7 +9,17 @@ const { PRIVATE_KEY, SEPOLIA_URL, ETHERSCAN_API_KEY, COINMARKETCAP_API_KEY } = p
 
 module.exports = {
   defaultNetwork: "hardhat",
-  solidity: "0.8.17",
+  // solidity: "0.8.17",
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.7",
+      },
+      {
+        version: "0.6.6",
+      },
+    ],
+  },
   networks: {
     localhost: {
       url: "http://127.0.0.1:8545",
